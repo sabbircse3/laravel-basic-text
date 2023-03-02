@@ -1,0 +1,13 @@
+________________________________
+laravel-> installation:
+________________________________
+1. Composer installation by cmd
+2. laravel project install: composer create-project laravel/laravel example-app(project name)
+3. Run projeon Web: php artisan serve
+_______________
+MVC -> models+VIEWS+Controller
+_______________________________
+Route: Route means the url of the page
+_______________________________
+make controller:
+php artisan make:controller ContactController(Controller name)

@@ -1,0 +1,213 @@
+1. composer create-project --prefer-dist laravel/laravel blog	// for the latest version
+
+2. public folder theke index.php and robots.txt, .htaccess root directory-te niye asa
+3. edit index.php and remove /../ from two places
+4. add .htacess in root directory and rename the RewriteBase /phonebook/ i.e: your project directory name
+5. 
+	N.B: edit composer.json and add 
+	
+	"require": {
+        "php": "^7.3|^8.0",
+        "fruitcake/laravel-cors": "^2.0",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "laravel/framework": "^8.54",
+        "laravel/sanctum": "^2.11",
+        "laravel/tinker": "^2.5",
+        "laravelcollective/html": "^6.0"       // this line
+    },
+	
+	composer require laravelcollective/html	   // for the latest version
+
+6. add your new provider to the providers array of config/app.php:
+
+  'providers' => [
+    // ...
+    Collective\Html\HtmlServiceProvider::class,
+    // ...
+  ],
+ 
+ 
+7. add two class aliases to the aliases array of config/app.php:
+
+  'aliases' => [
+    // ...
+      'Form' => Collective\Html\FormFacade::class,
+      'Html' => Collective\Html\HtmlFacade::class,
+    // ...
+  ],
+  
+[ 7 no. parjonto settings clear.....]
+---------------------------------------------------------------------------------------------------------  
+  
+8.
+ 
+{!! Form::open(['url' =>'registerCollectData','method' => 'post','role' => 'form', 'files'=>'true']) !!}
+
+{!! Form::close() !!}
+
+9. 
+
+    public function register(Request $request)
+    {
+        // Validation
+        $this->validate($request, [
+        'user' => 'required',
+        'pass' => 'required',
+		'file1'         => 'mimes:jpeg,jpg,png|max:300',
+        ]);
+
+        //Collecting data from html form
+        $user = trim($request->user);
+        $pass = trim($request->pass);
+		$file1= $request->file('file1');
+
+        //Check duplicatet user name
+        $count = DB::table('tbl_users')
+        ->where('user', $user)
+        ->where('pass', $pass)
+        ->count();
+
+        if($count > 0){
+            Session::put('failed','Sorry ! '.$user. ' User already exits. Try to add new user');
+            return Redirect::to('register');
+            exit();
+        }
+
+        if($file1){
+             $image_name        = Str::random(12);
+             $ext               = strtolower($file1->getClientOriginalExtension());
+             $image_full_name   = $image_name.'.'.$ext;
+             $upload_path       = "images/";
+             $image_url1        = $upload_path.$image_full_name;
+             $success           = $file1->move($upload_path,$image_full_name);
+            // with image
+            $data['file1']      = $image_url1;
+        }
+
+        $data = array();
+        $data['user']  = $user;
+        $data['pass']  = $pass;
+        $data['file1'] = $image_full_name;
+
+        $query = DB::table('tbl_users')->insert($data);
+
+        if($query){
+            Session::put('success','Congratulations, User added sucessfully !!');
+            return Redirect::to('register');
+        }else{
+            Session::put('failed','Alas !! Error occured, try again.');
+            return Redirect::to('register');
+        }    	
+    }
+	
+10. 
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
+use App\Http\Requests;
+use DB;
+use Session;
+
+11. The constructor method    
+
+	// basic function 
+    private $rcdate;
+    private $logged_id;
+    private $current_time;
+
+    public function __construct()
+    {
+        date_default_timezone_set('Asia/Dhaka');
+        $this->rcdate           = date('Y-m-d');
+        $this->logged_id        = Session::get('admin_id');
+        $this->current_time     = date('H:i:s');
+    }
+
+12. Ajax Database
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+$.ajaxSetup({
+	headers: {
+	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+}
+});
+
+$.ajax({
+	'url':"{{ url('/filterByPriceRange') }}",
+	'type':'post',
+	'dataType':'text',
+	data:{store:store},
+	success:function(data)
+	{
+		if(data =='f1'){
+			$('#wrong').text('Store Name Already Exists. Choose another Store Name.');
+		}else{
+			$('#wrong').empty(" ");
+		}
+	}
+});
+
+13.
+
+<?php if(Session::get('success') != null) { ?><?php echo Session::get('success'); Session::put('success',null);  ?><?php } ?>
+
+
+
+
+<?php if(Session::get('success') != null) { ?>
+<div class="alert alert-info alert-dismissible" role="alert">
+	<a href="#" class="fa fa-times" data-dismiss="alert" aria-label="close"></a>
+	<strong><?php echo Session::get('success') ;  ?></strong>
+	<?php Session::put('success',null) ;  ?>
+</div>
+<?php } ?>
+
+<?php
+if(Session::get('failed') != null) { ?>
+<div class="alert alert-danger alert-dismissible" role="alert">
+	<a href="#" class="fa fa-times" data-dismiss="alert" aria-label="close"></a>
+	<strong><?php echo Session::get('failed') ; ?></strong>
+	<?php echo Session::put('failed',null) ; ?>
+</div>
+<?php } ?>
+
+@if (count($errors) > 0)
+@foreach ($errors->all() as $error)      
+<div class="alert alert-danger alert-dismissible" role="alert">
+<a href="#" class="fa fa-times" data-dismiss="alert" aria-label="close"></a>
+<strong>{{ $error }}</strong>
+</div>
+@endforeach
+@endif
+
+
+
+<?php if(Session::get('success') != null) { ?>
+<div class="alert alert-primary" role="alert">
+	<div class="alert-body d-flex align-items-center">
+		<span><?php echo Session::get('success') ;  ?></span>
+		<?php Session::put('success',null) ;  ?>
+	</div>
+</div>
+<?php } ?>
+
+
+
+
+14. Bootstrapping Rules
+
+{{ URL::to('public/css/styles.css') }}
+
+15. In Laravel 8 version follow the below rules to make routes.
+
+use App\Http\Controllers\AdminController;
+
+Route::get('admin-dashboard',[AdminController::class, 'adminDashboard']);
+
+
+16. package list
+
+i. http://image.intervention.io/getting_started/installation
+ii. composer require intervention/image

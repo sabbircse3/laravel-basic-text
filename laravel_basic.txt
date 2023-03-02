@@ -1,0 +1,45 @@
+// controller make
+php artisan make:controller AdminController(Controller_Name)
+//
+
+1st: create cotroller through: php artisan make:controller AdminController
+
+2nd: resources > views > make_work_folder > work_file.blade.php
+
+3rd: app > Http > Controllers > edit-your-controller-that-you-make-using-this-
+//----------------------------//
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
+use App\Http\Requests;
+use DB;
+use Session;
+
+//------------------------------------------//
+    // basic function 
+    private $rcdate;
+    private $logged_id;
+    private $current_time;
+
+    public function __construct()
+    {
+        date_default_timezone_set('Asia/Dhaka');
+        $this->rcdate           = date('Y-m-d');
+        $this->logged_id        = Session::get('admin_id');
+        $this->current_time     = date('H:i:s');
+    }
+
+    public function index()
+    {
+        return view('admin.admin-dashboard//amar toiri kora work_file.blade.php(.blade.php baad dite hobe) ');
+    }
+
+
+4th: routes > eidt-web.php file- through
+
+use App\Http\Controllers\toiri_kora_Controller;
+
+Route::get('admin-dashboard(file name)',[Controller_Name::class,'index']);
+
+
