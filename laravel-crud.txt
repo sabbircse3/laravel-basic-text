@@ -1,0 +1,28 @@
+1.--> composer install
+2.--> laravel install--->composer create-project laravel/laravel example-app  ---> cd project file name .
+3.-->jetStrim install--->composer require laravel/jetstream-->livewire:  php artisan jetstream:install livewire--->npm install--->npm run build .
+
+4.--> make database and connect with project
+5.--> php artisan migrate(database migrate)
+6.--> php artisan serve(more port: php artisan serve --port 8001)
+
+_________________________________BOOTSTRAPIING______________________________________________
+1. template chose
+2.  go project file --> public --> create a folder (name then as you work)--->
+3. template plugin files go to backend folder
+
+4. go to project througe editor--- then open views--- then make 1 folder(app)-- make 2 folder (backend, frontend) (as you want)-->backend(make: master.blade -- all backend)-->body---> header + footer + sidebar.blade.php
+
+5. {{ asset(' ') }}    {{ asset('backend/    ') }}
+
+6. @include(file location)
+
+
+7. index ----> @extends('app.backend.backend_master')
+@section('content')
+ekhane content thakbe
+
+@endsection
+8.  master file a jabe ---- @yield('content') ---> j khane index section suru hoyese
+9.  php artisan make:controller Backend/Customer/CustomerController(folder ar vitor controller make )
+10. 

@@ -11,3 +11,30 @@ Route: Route means the url of the page
 _______________________________
 make controller:
 php artisan make:controller ContactController(Controller name)
+
+_______________________________
+MiddleWare
+_______________________________
+php artisan make:middleware EnsureTokenIsValid
+
+*** After That: go Kernel at the last anďpast
+'auth' => \App\Http\Middleware\Authenticate::class,
+
+then change 'auth' as you creat like 'age'.
+
+URL set:
+<a href="{{ url('/') }}">Home</a> |
+<a href="{{ URL::to('/about') }}">About</a> |
+<a href="{{ route('con') }}">Contact</a> |
+Route::get('/contact-sabbir-laravel', [ContactController::class, 'index'])->name('con');
+
+
+
+jestream:
+
+1. composer require laravel/jetstream
+2. php artisan jetstream:install livewire
+3. php artisan migrate
+4. npm install && npm run dev
+5. npm install
+6. npm run build
